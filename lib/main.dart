@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chess_board/flutter_chess_board.dart';
 
@@ -36,9 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Colors.brown,
       appBar: AppBar(
+        backgroundColor: Colors.brown,
+        elevation: 0,
         title: const Text('Chess Game'),
       ),
       body: SizedBox(
@@ -49,13 +52,18 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                   child: Center(
                     child: ChessBoard(
+                      onMove: () {
+                        controller.isThreefoldRepetition;
+                        print(controller.isGameOver());
+                      },
                       controller: controller,
-                      boardColor: BoardColor.orange,
+                      boardColor: BoardColor.darkBrown,
                       boardOrientation: PlayerColor.white,
                     ),
                   ),
 
               ),
+
             ],
           ),
         ),
