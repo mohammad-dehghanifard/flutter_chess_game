@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chess_game/component/helper_function.dart';
+import 'package:flutter_chess_game/constant/colors.dart';
 import 'package:flutter_chess_game/model/chess_piece.dart';
 import 'package:flutter_chess_game/widget/square.dart';
 
@@ -17,6 +18,7 @@ class _GameBoardViewState extends State<GameBoardView> {
   Widget build(BuildContext context) {
     ChessPiece myPiece = ChessPiece(type: ChessPieceType.pawn, iconPath: Assets.icons.chessPawn.path, isWhite: false);
     return Scaffold(
+      backgroundColor: AppColors.backGroundColor,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(

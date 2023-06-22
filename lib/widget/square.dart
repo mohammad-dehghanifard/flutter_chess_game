@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_chess_game/constant/colors.dart';
 import 'package:flutter_chess_game/model/chess_piece.dart';
 
 class Square extends StatelessWidget {
@@ -9,7 +10,7 @@ class Square extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-    color: isWhite ? Colors.grey[400] : Colors.grey[600],
+    color: isWhite ? AppColors.chessBoardWhite : AppColors.chessBoardBlack,
      padding: const EdgeInsets.all(8),
      child: piece != null ? Image.asset(piece!.iconPath,color: piece!.isWhite? Colors.white : Colors.black) : null,
     );
