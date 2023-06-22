@@ -15,10 +15,16 @@ class GameBoardView extends StatefulWidget {
 
 class _GameBoardViewState extends State<GameBoardView> {
   //================ variables =================================================
-  late List<List<ChessPiece?>> board;
+  late List<List<ChessPiece?>> board; // ایجاد برد خالی
+  ChessPiece? selectedChessPiece; // مهره ای که در حال حاضر کاربر انتخاب کرده
+  // از اونجا که در ابتدا نباید هیچکدوم از خونه ها انتخاب شده باشن از -1 برای مقدار دهی اولیه استفاده میشه
+  int selectedRow = -1;
+  int selectedColumn = -1;
 
   //================ Functions =================================================
+  // مقدار دهی اولیه گیم برد
   void _initialBoard(){
+    // یک لیست جدید برای بردر با 8 ردیف و 8 ستون ایجاد میکنه
     List<List<ChessPiece?>> newBoard = List.generate(8,(index) => List.generate(8,(index) => null));
 
     // قرار دادن مهره سرباز روی جدول
@@ -65,7 +71,16 @@ class _GameBoardViewState extends State<GameBoardView> {
 
     board = newBoard;
   }
-
+  // در صورتی که داخل خونه ای که روش کلیک شده مهره ای باشه اون خونه رو انتخاب میکنه
+  void _selectPiece(int row,int col){
+    setState(() {
+      if( board[row][col]!= null ){
+        selectedChessPiece = board[row][col];
+        selectedRow = row;
+        selectedColumn = col;
+      }
+    });
+  }
 
 
   @override
@@ -85,9 +100,16 @@ class _GameBoardViewState extends State<GameBoardView> {
           physics: const NeverScrollableScrollPhysics(),  // غیرفعال کردن امکان اسکرول کردن GridView
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),  // تعیین تنظیمات جدول (8 ستون)
           itemBuilder: (context, index) {
+
            int boardRow = index ~/ 8;
            int boardColumn = index % 8;
-            return Square(isWhite: isWhite(index),piece: board[boardRow][boardColumn]);
+           bool isSelected = selectedRow == boardRow && selectedColumn == boardColumn;
+            return Square(
+                onTap: () => _selectPiece(boardRow,boardColumn),
+                isSelected: isSelected,
+                isWhite: isWhite(index),
+                piece: board[boardRow][boardColumn]
+            );
           } // ایجاد عنصر مربعی با رنگ مشخص شده
         ),
       ),
