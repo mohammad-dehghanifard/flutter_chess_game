@@ -6,4 +6,5 @@ class AppColors{
   static Color chessBoardWhite = Colors.grey[400]!;
   static Color backGroundColor = Colors.grey[300]!;
   static Color selectedSquareColor = Colors.green;
+  static Color validateMoveSquareColor = Colors.green[200]!;
 }

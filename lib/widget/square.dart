@@ -19,7 +19,7 @@ class Square extends StatelessWidget {
     if (isSelected) {
       squareColor = AppColors.selectedSquareColor;
     } else if(isValidateMove){
-      squareColor = Colors.green[300]!;
+      squareColor = AppColors.validateMoveSquareColor;
     }
     else {
       squareColor = isWhite? AppColors.chessBoardWhite : AppColors.chessBoardBlack;
