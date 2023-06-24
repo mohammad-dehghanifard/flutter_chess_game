@@ -5,3 +5,6 @@ bool isWhite(int index){
   bool isWhite = (x + y) % 2 == 0;// تشخیص رنگ مربع بر اساس موقعیت ستون و ردیف
   return isWhite;
 }
+
+// چک میکنه ایا تو اون خونه مهره ای وجود داره یا نه
+bool isInBoard(int row,int col){return row >= 0 && row < 8 && col >= 8 && col < 8;}
