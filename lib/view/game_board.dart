@@ -16,6 +16,7 @@ class GameBoardView extends StatefulWidget {
 class _GameBoardViewState extends State<GameBoardView> {
   //================ variables =================================================
   late List<List<ChessPiece?>> board; // ایجاد برد خالی
+  List<List<int>> validatePieceMove = []; // مسیر های حرکت مجاز مهره های روی گیم برد
   ChessPiece? selectedChessPiece; // مهره ای که در حال حاضر کاربر انتخاب کرده
   // از اونجا که در ابتدا نباید هیچکدوم از خونه ها انتخاب شده باشن از -1 برای مقدار دهی اولیه استفاده میشه
   int selectedRow = -1;
@@ -79,9 +80,39 @@ class _GameBoardViewState extends State<GameBoardView> {
         selectedRow = row;
         selectedColumn = col;
       }
+      // در صورتی که مهره انتخاب شده باشه مسیر های حرکت مجاز نمایش داده میشن
+
     });
   }
 
+  // محسابه مسیر های حرکت مجاز مهره ها
+  List<List<int>> _calculateRawValidMove({required int row,required int col,required ChessPiece piece}){
+    List<List<int>> candidateMove = []; // مسیر های قابل حرکت
+    int direction = piece.isWhite ? -1 : 1; // به دست اوردن موقعیت اولیه مهره ها
+    // محسابه مسیر حرکت بر اساس نوع مهره بازی
+    switch(piece.type) {
+      case ChessPieceType.bishop:
+        // TODO: Handle this case.
+        break;
+      case ChessPieceType.king:
+        // TODO: Handle this case.
+        break;
+      case ChessPieceType.knight:
+        // TODO: Handle this case.
+        break;
+      case ChessPieceType.pawn:
+
+        break;
+      case ChessPieceType.queen:
+        // TODO: Handle this case.
+        break;
+      case ChessPieceType.rook:
+        // TODO: Handle this case.
+        break;
+    }
+
+    return candidateMove;
+  }
 
   @override
   void initState() {
