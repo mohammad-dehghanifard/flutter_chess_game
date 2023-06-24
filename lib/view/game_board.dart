@@ -114,6 +114,13 @@ class _GameBoardViewState extends State<GameBoardView> {
             candidateMove.add([row + 2 * direction,col]);
           }
         }
+        // در صورتی که سرباز بتونه یکی از مهره های رقیب رو بزنه
+        if(isInBoard(row + direction,col - 1) && board[row + direction][col - 1] != null && board[row + direction][col - 1]!.isWhite){
+          candidateMove.add([row + direction,col - 1]);
+        }
+        if(isInBoard(row + direction,col + 1) && board[row + direction][col + 1] != null && board[row + direction][col + 1]!.isWhite){
+          candidateMove.add([row + direction,col + 1]);
+        }
 
         break;
       case ChessPieceType.queen:
