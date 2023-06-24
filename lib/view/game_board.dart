@@ -120,13 +120,37 @@ class _GameBoardViewState extends State<GameBoardView> {
         if(isInBoard(row + direction,col + 1) && board[row + direction][col + 1] != null && board[row + direction][col + 1]!.isWhite){
           candidateMove.add([row + direction,col + 1]);
         }
-
         break;
       case ChessPieceType.queen:
         // TODO: Handle this case.
         break;
       case ChessPieceType.rook:
-        // TODO: Handle this case.
+        // مشخص کردن مسیر حرکت پیشنهادی مهره قلعه
+        var rookDirections = [
+          [-1,0], // up
+          [1,0], // down
+          [0,-1], // left
+          [0,1] // right
+        ];
+        for(var direction in rookDirections){
+          var i = 1;
+          while(true){
+            var newRow = row + i * direction[0];
+            var newCol = col + i * direction[1];
+
+            if(!isInBoard(newRow,newCol)){
+              break;
+            }
+            if(board[newRow][newCol] != null){
+              if(board[newRow][newCol]!.isWhite != piece.isWhite){
+                candidateMove.add([newRow,newCol]); // زدن مهره های بازیکن مقابل
+              }
+              break;
+            }
+            candidateMove.add([newRow,newCol]);
+            i++;
+          }
+        }
         break;
     }
 
