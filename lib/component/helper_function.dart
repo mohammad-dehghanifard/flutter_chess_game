@@ -7,4 +7,4 @@ bool isWhite(int index){
 }
 
 // چک میکنه ایا تو اون خونه مهره ای وجود داره یا نه
-bool isInBoard(int row,int col){return row >= 0 && row < 8 && col >= 8 && col < 8;}
+bool isInBoard(int row,int col){return row >= 0 && row < 8 && col >= 0 && col < 8;}

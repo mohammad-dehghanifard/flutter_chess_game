@@ -5,11 +5,12 @@ import 'package:flutter_chess_game/model/chess_piece.dart';
 
 class Square extends StatelessWidget {
   const Square(
-      {Key? key, required this.isWhite, this.piece, required this.isSelected, required this.onTap})
+      {Key? key, required this.isWhite, this.piece, required this.isSelected, required this.onTap, required this.isValidateMove})
       : super(key: key);
   final bool isWhite;
   final ChessPiece? piece;
   final bool isSelected;
+  final bool isValidateMove;
   final Function() onTap;
 
   @override
@@ -17,7 +18,10 @@ class Square extends StatelessWidget {
     final Color squareColor;
     if (isSelected) {
       squareColor = AppColors.selectedSquareColor;
-    } else {
+    } else if(isValidateMove){
+      squareColor = Colors.green[300]!;
+    }
+    else {
       squareColor = isWhite? AppColors.chessBoardWhite : AppColors.chessBoardBlack;
     }
     return GestureDetector(

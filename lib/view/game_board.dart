@@ -80,14 +80,13 @@ class _GameBoardViewState extends State<GameBoardView> {
         selectedColumn = col;
       }
       // در صورتی که مهره انتخاب شده باشه مسیر های حرکت مجاز نمایش داده میشن
-
+      validatePieceMove = _calculateRawValidMove(row: selectedRow, col: selectedColumn, piece: selectedChessPiece!);
     });
   }
-
   // محسابه مسیر های حرکت مجاز مهره ها
-  List<List<int>> _calculateRawValidMove({required int row,required int col,required ChessPiece piece}){
+  List<List<int>> _calculateRawValidMove({required int row,required int col,required ChessPiece? piece}){
     List<List<int>> candidateMove = []; // مسیر های قابل حرکت
-    int direction = piece.isWhite ? -1 : 1; // به دست اوردن موقعیت اولیه مهره ها
+    int direction = piece!.isWhite ? -1 : 1; // به دست اوردن موقعیت اولیه مهره ها
     // محسابه مسیر حرکت بر اساس نوع مهره بازی
     switch(piece.type) {
       case ChessPieceType.bishop:
@@ -101,13 +100,13 @@ class _GameBoardViewState extends State<GameBoardView> {
         break;
       case ChessPieceType.pawn:
         //در صورتی که خونه های جلویی سرباز ها پر نباشه میتونن به جلو حرکت کنن
-        if(isInBoard(row + direction,col) && board[row + direction][col] != null){
+        if(isInBoard(row + direction,col) && board[row + direction][col] == null){
           candidateMove.add([row + direction,col]);
         }
         //در صورتی که سرباز ها داخل موقعیت اولیه خودشون باشن میتونن 2 خونه به جلو حرکت کنن
-        if(row == 1 && piece.isWhite || (row == 6 && piece.isWhite)){
+        if(row == 1 && !piece.isWhite || (row == 6 && piece.isWhite)){
           if(
-          isInBoard(row + 2,col) &&
+          isInBoard(row + 2 * direction,col) &&
           board[row + 2 * direction][col] == null &&
           board[row + direction][col] == null
           ){
@@ -155,9 +154,18 @@ class _GameBoardViewState extends State<GameBoardView> {
            int boardRow = index ~/ 8;
            int boardColumn = index % 8;
            bool isSelected = selectedRow == boardRow && selectedColumn == boardColumn;
+
+           //مشخص کردن این که آیا مهره انتخاب شده مسیر حرکت پیشنهادی داره یا خیر
+           bool validateMove = false;
+           for(var position in validatePieceMove){
+             if(position[0] == boardRow && position[1] == boardColumn){
+               validateMove = true;
+             }
+           }
             return Square(
                 onTap: () => _selectPiece(boardRow,boardColumn),
                 isSelected: isSelected,
+                isValidateMove: validateMove,
                 isWhite: isWhite(index),
                 piece: board[boardRow][boardColumn]
             );
