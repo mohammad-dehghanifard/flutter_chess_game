@@ -3,7 +3,6 @@ import 'package:flutter_chess_game/component/helper_function.dart';
 import 'package:flutter_chess_game/constant/colors.dart';
 import 'package:flutter_chess_game/model/chess_piece.dart';
 import 'package:flutter_chess_game/widget/square.dart';
-
 import '../gen/assets.gen.dart';
 
 class GameBoardView extends StatefulWidget {
@@ -101,6 +100,20 @@ class _GameBoardViewState extends State<GameBoardView> {
         // TODO: Handle this case.
         break;
       case ChessPieceType.pawn:
+        //در صورتی که خونه های جلویی سرباز ها پر نباشه میتونن به جلو حرکت کنن
+        if(isInBoard(row + direction,col) && board[row + direction][col] != null){
+          candidateMove.add([row + direction,col]);
+        }
+        //در صورتی که سرباز ها داخل موقعیت اولیه خودشون باشن میتونن 2 خونه به جلو حرکت کنن
+        if(row == 1 && piece.isWhite || (row == 6 && piece.isWhite)){
+          if(
+          isInBoard(row + 2,col) &&
+          board[row + 2 * direction][col] == null &&
+          board[row + direction][col] == null
+          ){
+            candidateMove.add([row + 2 * direction,col]);
+          }
+        }
 
         break;
       case ChessPieceType.queen:
