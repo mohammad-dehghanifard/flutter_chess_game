@@ -96,7 +96,33 @@ class _GameBoardViewState extends State<GameBoardView> {
         // TODO: Handle this case.
         break;
       case ChessPieceType.knight:
-        // TODO: Handle this case.
+        // مشخص کردن مسیر پیشنهادی حرکت اسب
+        var knightValidDirection = [
+          [-2,-1], // up 2 left 1
+          [-2,1], // up 2 right 1
+          [-1,-2], // up 1 left 2
+          [-1,2], // up 1 right 2
+          [1,-2], // down 1 left 2
+          [1,2], //down 1 right 2
+          [2,-1], //down 2 left 1
+          [2,1] // down 2 right 1
+        ];
+        for(var direction in knightValidDirection){
+            var newRow = row +  direction[0];
+            var newCol = col +  direction[1];
+
+            if(!isInBoard(newRow,newCol)){
+              continue;
+            }
+            if(board[newRow][newCol] != null){
+              if(board[newRow][newCol]!.isWhite != piece.isWhite){
+                candidateMove.add([newRow,newCol]); // زدن مهره های بازیکن مقابل
+              }
+              continue;
+            }
+            candidateMove.add([newRow,newCol]);
+
+        }
         break;
       case ChessPieceType.pawn:
         //در صورتی که خونه های جلویی سرباز ها پر نباشه میتونن به جلو حرکت کنن
