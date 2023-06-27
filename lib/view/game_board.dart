@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_chess_game/component/helper_function.dart';
 import 'package:flutter_chess_game/constant/colors.dart';
 import 'package:flutter_chess_game/model/chess_piece.dart';
+import 'package:flutter_chess_game/model/dead_piece.dart';
 import 'package:flutter_chess_game/widget/square.dart';
 import '../gen/assets.gen.dart';
 
@@ -314,14 +315,17 @@ class _GameBoardViewState extends State<GameBoardView> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            GridView.builder(
-                gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-                itemCount: blackPieceTaken.length,
-                itemBuilder: (context, index) {
 
-                },),
-
+            // لیست مهره های حذف شده سیاه
             Expanded(
+              child: GridView.builder(
+                  gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                  itemCount: blackPieceTaken.length,
+                  itemBuilder: (context, index)  => DeadPiece(iconPath:blackPieceTaken[index].iconPath,isWhite: false)),
+            ),
+            // صفحه اصلی بازی
+            Expanded(
+              flex: 3,
               child: GridView.builder(
                 itemCount: 8 * 8,  // تعداد کل عناصر در GridView (64 عنصر)
                 physics: const NeverScrollableScrollPhysics(),  // غیرفعال کردن امکان اسکرول کردن GridView
@@ -348,6 +352,14 @@ class _GameBoardViewState extends State<GameBoardView> {
                   );
                 } // ایجاد عنصر مربعی با رنگ مشخص شده
               ),
+            ),
+
+            // لیست مهره های حذف شده سفید
+            Expanded(
+              child: GridView.builder(
+                  gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                  itemCount: withePieceTaken.length,
+                  itemBuilder: (context, index)  => DeadPiece(iconPath:withePieceTaken[index].iconPath,isWhite: true)),
             ),
           ],
         ),

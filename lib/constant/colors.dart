@@ -7,4 +7,6 @@ class AppColors{
   static Color backGroundColor = Colors.grey[300]!;
   static Color selectedSquareColor = Colors.green;
   static Color validateMoveSquareColor = Colors.green[200]!;
+  static Color whiteColor = Colors.white;
+  static Color blackColor = Colors.black;
 }
