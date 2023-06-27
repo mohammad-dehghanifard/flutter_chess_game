@@ -98,7 +98,7 @@ class _GameBoardViewState extends State<GameBoardView> {
           [1,1] //down right
         ];
         for(var direction in bishopValidateDirection){
-          var i = 0;
+          var i = 1;
           while(true){
             var newRow = row + i * direction[0];
             var newCol = col + i * direction[1];
