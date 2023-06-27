@@ -74,7 +74,13 @@ class _GameBoardViewState extends State<GameBoardView> {
   // در صورتی که داخل خونه ای که روش کلیک شده مهره ای باشه اون خونه رو انتخاب میکنه
   void _selectPiece(int row,int col){
     setState(() {
-      if( board[row][col]!= null ){
+      if(selectedChessPiece == null && board[row][col]!= null){
+        selectedChessPiece = board[row][col];
+        selectedRow = row;
+        selectedColumn = col;
+      }
+
+      else if(board[row][col]!= null && board[row][col]!.isWhite == selectedChessPiece!.isWhite){
         selectedChessPiece = board[row][col];
         selectedRow = row;
         selectedColumn = col;
@@ -82,8 +88,7 @@ class _GameBoardViewState extends State<GameBoardView> {
 
       // در صورتی که کاربر یک مهره رو انتخاب کرده باشه و مهره مجاز به حرکت باشه، مهره به خونه جدید منتقل میشه
       else if(
-      selectedChessPiece != null &&
-      validatePieceMove.any((element) => element[0] == row && element[1] == col)){
+      selectedChessPiece != null && validatePieceMove.any((element) => element[0] == row && element[1] == col)){
         pieceMovement(newRow: row, newCol: col);
       }
 
