@@ -90,7 +90,31 @@ class _GameBoardViewState extends State<GameBoardView> {
     // محسابه مسیر حرکت بر اساس نوع مهره بازی
     switch(piece.type) {
       case ChessPieceType.bishop:
-        // TODO: Handle this case.
+      // مشخص کردن مسیر پیشنهادی حرکت اسب
+        var bishopValidateDirection = [
+          [-1,-1], // up left
+          [-1,1], // up right
+          [1,-1], // down left
+          [1,1] //down right
+        ];
+        for(var direction in bishopValidateDirection){
+          var i = 0;
+          while(true){
+            var newRow = row + i * direction[0];
+            var newCol = col + i * direction[1];
+            if(!isInBoard(newRow,newCol)){
+              break;
+            }
+            if(board[newRow][newCol] != null){
+              if(board[newRow][newCol]!.isWhite != piece.isWhite){
+                candidateMove.add([newRow,newCol]); // زدن مهره رقیب
+              }
+              break;
+            }
+            candidateMove.add([newRow,newCol]);
+            i++;
+          }
+        }
         break;
       case ChessPieceType.king:
         // TODO: Handle this case.
