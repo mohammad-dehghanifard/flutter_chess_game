@@ -260,6 +260,19 @@ class _GameBoardViewState extends State<GameBoardView> {
 
     return candidateMove;
   }
+  // حرکت مهره ها
+  void pieceMovement({required int newRow,required int newCol}){
+    // حرکت مهمره به خونه جدید و خالی کردن خونه قبلی
+  board[newRow][newCol] = selectedChessPiece;
+  board[selectedRow][selectedColumn] = null;
+  // برگشت به حالت اولیه
+  setState(() {
+    selectedChessPiece = null;
+    selectedRow = -1;
+    selectedColumn = -1;
+    validatePieceMove = [];
+  });
+  }
 
   @override
   void initState() {

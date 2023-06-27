@@ -29,6 +29,7 @@ class Square extends StatelessWidget {
       child: Container(
         color: squareColor,
         padding: const EdgeInsets.all(8),
+        margin: EdgeInsets.all(isValidateMove ? 2 : 0),
         child: piece != null
             ? Image.asset(piece!.iconPath,
                 color: piece!.isWhite ? Colors.white : Colors.black)
