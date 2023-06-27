@@ -21,6 +21,10 @@ class _GameBoardViewState extends State<GameBoardView> {
   int selectedRow = -1;
   int selectedColumn = -1;
 
+  // لیست مهره های حذف شده سیاه و سفید
+  List<ChessPiece> withePieceTaken = [];
+  List<ChessPiece> blackPieceTaken = [];
+
   //================ Functions =================================================
   // مقدار دهی اولیه گیم برد
   void _initialBoard(){
@@ -275,6 +279,15 @@ class _GameBoardViewState extends State<GameBoardView> {
   }
   // حرکت مهره ها
   void pieceMovement({required int newRow,required int newCol}){
+    if(board[newRow][newCol] != null){
+      // اضافه کرده مهره حذف شده به لیست
+      var pieceKilled = board[newRow][newCol];
+      if(pieceKilled!.isWhite){
+        withePieceTaken.add(pieceKilled);
+      }else{
+        blackPieceTaken.add(pieceKilled);
+      }
+    }
     // حرکت مهمره به خونه جدید و خالی کردن خونه قبلی
   board[newRow][newCol] = selectedChessPiece;
   board[selectedRow][selectedColumn] = null;
@@ -299,31 +312,44 @@ class _GameBoardViewState extends State<GameBoardView> {
       backgroundColor: AppColors.backGroundColor,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: GridView.builder(
-          itemCount: 8 * 8,  // تعداد کل عناصر در GridView (64 عنصر)
-          physics: const NeverScrollableScrollPhysics(),  // غیرفعال کردن امکان اسکرول کردن GridView
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),  // تعیین تنظیمات جدول (8 ستون)
-          itemBuilder: (context, index) {
+        child: Column(
+          children: [
+            GridView.builder(
+                gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                itemCount: blackPieceTaken.length,
+                itemBuilder: (context, index) {
 
-           int boardRow = index ~/ 8;
-           int boardColumn = index % 8;
-           bool isSelected = selectedRow == boardRow && selectedColumn == boardColumn;
+                },),
 
-           //مشخص کردن این که آیا مهره انتخاب شده مسیر حرکت پیشنهادی داره یا خیر
-           bool validateMove = false;
-           for(var position in validatePieceMove){
-             if(position[0] == boardRow && position[1] == boardColumn){
-               validateMove = true;
-             }
-           }
-            return Square(
-                onTap: () => _selectPiece(boardRow,boardColumn),
-                isSelected: isSelected,
-                isValidateMove: validateMove,
-                isWhite: isWhite(index),
-                piece: board[boardRow][boardColumn]
-            );
-          } // ایجاد عنصر مربعی با رنگ مشخص شده
+            Expanded(
+              child: GridView.builder(
+                itemCount: 8 * 8,  // تعداد کل عناصر در GridView (64 عنصر)
+                physics: const NeverScrollableScrollPhysics(),  // غیرفعال کردن امکان اسکرول کردن GridView
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),  // تعیین تنظیمات جدول (8 ستون)
+                itemBuilder: (context, index) {
+
+                 int boardRow = index ~/ 8;
+                 int boardColumn = index % 8;
+                 bool isSelected = selectedRow == boardRow && selectedColumn == boardColumn;
+
+                 //مشخص کردن این که آیا مهره انتخاب شده مسیر حرکت پیشنهادی داره یا خیر
+                 bool validateMove = false;
+                 for(var position in validatePieceMove){
+                   if(position[0] == boardRow && position[1] == boardColumn){
+                     validateMove = true;
+                   }
+                 }
+                  return Square(
+                      onTap: () => _selectPiece(boardRow,boardColumn),
+                      isSelected: isSelected,
+                      isValidateMove: validateMove,
+                      isWhite: isWhite(index),
+                      piece: board[boardRow][boardColumn]
+                  );
+                } // ایجاد عنصر مربعی با رنگ مشخص شده
+              ),
+            ),
+          ],
         ),
       ),
 
