@@ -117,7 +117,32 @@ class _GameBoardViewState extends State<GameBoardView> {
         }
         break;
       case ChessPieceType.king:
-        // TODO: Handle this case.
+        // مشخص کردن مسیر حرکت پادشاه
+        var kingValidateDirection = [
+          [-1,0], // up
+          [1,0], // down
+          [0,-1], // left
+          [0,1], // right
+          [-1,-1], // up left
+          [-1,1], // up right
+          [1,-1], // down left
+          [1,1] // down right
+        ];
+        for(var direction in kingValidateDirection){
+          var newRow = row +  direction[0];
+          var newCol = col +  direction[1];
+
+          if(!isInBoard(newRow,newCol)){
+            continue;
+          }
+          if(board[newRow][newCol] != null){
+            if(board[newRow][newCol]!.isWhite != piece.isWhite){
+              candidateMove.add([newRow,newCol]); // زدن مهره های بازیکن مقابل
+            }
+            continue;
+          }
+          candidateMove.add([newRow,newCol]);
+        }
         break;
       case ChessPieceType.knight:
         // مشخص کردن مسیر پیشنهادی حرکت اسب
