@@ -79,6 +79,14 @@ class _GameBoardViewState extends State<GameBoardView> {
         selectedRow = row;
         selectedColumn = col;
       }
+
+      // در صورتی که کاربر یک مهره رو انتخاب کرده باشه و مهره مجاز به حرکت باشه، مهره به خونه جدید منتقل میشه
+      else if(
+      selectedChessPiece != null &&
+      validatePieceMove.any((element) => element[0] == row && element[1] == col)){
+        pieceMovement(newRow: row, newCol: col);
+      }
+
       // در صورتی که مهره انتخاب شده باشه مسیر های حرکت مجاز نمایش داده میشن
       validatePieceMove = _calculateRawValidMove(row: selectedRow, col: selectedColumn, piece: selectedChessPiece!);
     });
