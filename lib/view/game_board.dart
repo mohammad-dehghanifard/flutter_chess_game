@@ -286,8 +286,8 @@ class _GameBoardViewState extends State<GameBoardView> {
   }
   // حرکت مهره ها
   void pieceMovement({required int newRow,required int newCol}){
+    // اضافه کرده مهره حذف شده به لیست
     if(board[newRow][newCol] != null){
-      // اضافه کرده مهره حذف شده به لیست
       var pieceKilled = board[newRow][newCol];
       if(pieceKilled!.isWhite){
         withePieceTaken.add(pieceKilled);
@@ -295,6 +295,15 @@ class _GameBoardViewState extends State<GameBoardView> {
         blackPieceTaken.add(pieceKilled);
       }
     }
+    // برسی این که ایا پادشاه میتونه حرکت کنه یا نه
+    if(selectedChessPiece!.type == ChessPieceType.king){
+      if(selectedChessPiece!.isWhite){
+        whiteKingPosition = [newRow,newCol];
+      }else{
+        blackKingPosition = [newRow,newCol];
+      }
+    }
+
     // حرکت مهمره به خونه جدید و خالی کردن خونه قبلی
   board[newRow][newCol] = selectedChessPiece;
   board[selectedRow][selectedColumn] = null;
