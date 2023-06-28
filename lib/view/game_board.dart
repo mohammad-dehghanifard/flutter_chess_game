@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_chess_game/component/helper_function.dart';
 import 'package:flutter_chess_game/constant/colors.dart';
@@ -104,7 +106,7 @@ class _GameBoardViewState extends State<GameBoardView> {
       }
 
       // در صورتی که مهره انتخاب شده باشه مسیر های حرکت مجاز نمایش داده میشن
-      validatePieceMove = _calculateRawValidMove(row: selectedRow, col: selectedColumn, piece: selectedChessPiece!);
+      validatePieceMove = _calculateRealValidateMove(row: selectedRow,col:  selectedColumn,piece:  selectedChessPiece!,checkSimulation: true);
     });
   }
   // محسابه مسیر های حرکت مجاز مهره ها
@@ -284,6 +286,57 @@ class _GameBoardViewState extends State<GameBoardView> {
 
     return candidateMove;
   }
+  List<List<int>> _calculateRealValidateMove({required int row,required int col,required ChessPiece? piece,required bool checkSimulation}){
+    List<List<int>> realValidMove = [];
+    List<List<int>> candidateMove = [];
+
+    for(var move in candidateMove){
+      int endRow = move[0];
+      int endCol = move[1];
+      if(_simulatedMoveSafe(piece!,row,col,endRow,endCol)){
+        realValidMove.add(move);
+      }else{
+        realValidMove = candidateMove;
+      }
+    }
+
+
+
+    return realValidMove;
+  }
+
+  bool _simulatedMoveSafe(ChessPiece piece,int startRow,int startCol,int endRow,int endCol){
+    ChessPiece? originalDestinationPiece = board[endRow][endCol];
+
+    List<int>? originalKingPosition;
+
+    if(piece.type == ChessPieceType.king){
+      originalKingPosition = piece.isWhite? whiteKingPosition : blackKingPosition;
+      if(piece.isWhite){
+        whiteKingPosition = [endRow,endCol];
+      }else{
+        blackKingPosition = [endRow,endCol];
+      }
+    }
+
+    board[endRow][endCol] = piece;
+    board[startRow][startCol] = null;
+
+    bool kingInCheck = kingCheck(piece.isWhite);
+
+    board[startRow][startCol] = piece;
+    board[endRow][endCol] = originalDestinationPiece;
+
+    if(piece.type == ChessPieceType.king){
+      if(piece.isWhite){
+        whiteKingPosition = originalKingPosition!;
+      }else{
+        blackKingPosition = originalKingPosition!;
+      }
+    }
+    return kingInCheck;
+  }
+
   // حرکت مهره ها
   void pieceMovement({required int newRow,required int newCol}){
     // اضافه کرده مهره حذف شده به لیست
@@ -337,7 +390,7 @@ class _GameBoardViewState extends State<GameBoardView> {
           continue;
         }
 
-        List<List<int>> pieceValidateMove = _calculateRawValidMove(row: i, col: j, piece: board[i][j]);
+        List<List<int>> pieceValidateMove = _calculateRealValidateMove(row: i,col:  j,piece: board[i][j],checkSimulation: false);
         // برسی میکنه که پادشاه میتونه حرکت کنه یا نه
         if(pieceValidateMove.any((element) => element[0] == kingPosition[0] &&
             element[1] == kingPosition[1] )){
