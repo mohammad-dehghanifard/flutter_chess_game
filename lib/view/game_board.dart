@@ -22,6 +22,9 @@ class _GameBoardViewState extends State<GameBoardView> {
   int selectedRow = -1;
   int selectedColumn = -1;
   bool isWhiteTurn = true; // برای مشخص کردن نوبت بازیکن
+  List<int> whiteKingPosition = [7,4]; // موقعیت مهره پادشاه سفید
+  List<int> blackKingPosition = [0,4]; // موقعیت مهره پادشاه سیاه
+  bool checkKingStatus = false; // برای چک کردن این که ایا مهره پادشاه در خطره یا نه
 
   // لیست مهره های حذف شده سیاه و سفید
   List<ChessPiece> withePieceTaken = [];
@@ -295,6 +298,14 @@ class _GameBoardViewState extends State<GameBoardView> {
     // حرکت مهمره به خونه جدید و خالی کردن خونه قبلی
   board[newRow][newCol] = selectedChessPiece;
   board[selectedRow][selectedColumn] = null;
+
+  // در صورتی که مهره پادشاه در خطر حمله مهره های رقیب باشه
+    if(kingCheck(!isWhiteTurn)){
+      checkKingStatus = true;
+    }else{
+      checkKingStatus = false;
+    }
+
   // برگشت به حالت اولیه
   setState(() {
     selectedChessPiece = null;
@@ -304,6 +315,28 @@ class _GameBoardViewState extends State<GameBoardView> {
   });
   // تغییر نوبت بازیکن
   isWhiteTurn = !isWhiteTurn;
+  }
+
+  bool kingCheck(bool isWhiteKing){
+    // دریافت پوزیشن پادشاه
+    List<int> kingPosition = isWhiteKing? whiteKingPosition : blackKingPosition;
+    // برسی این که مهره های دشمن میتونن به پادشاه حمله کنن یا نه
+    for(int i = 0 ; i < 8 ; i++){
+      for(int j = 0 ; j < 8 ; j++){
+        // خونه های خالی و خونه هایی که مهره همرنگ پادشاه دارن رد میشه
+        if(board[i][j] == null || board[i][j]!.isWhite == isWhiteKing ){
+          continue;
+        }
+
+        List<List<int>> pieceValidateMove = _calculateRawValidMove(row: i, col: j, piece: board[i][j]);
+        // برسی میکنه که پادشاه میتونه حرکت کنه یا نه
+        if(pieceValidateMove.any((element) => element[0] == kingPosition[0] &&
+            element[1] == kingPosition[1] )){
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   @override
@@ -328,6 +361,8 @@ class _GameBoardViewState extends State<GameBoardView> {
                   itemCount: blackPieceTaken.length,
                   itemBuilder: (context, index)  => DeadPiece(iconPath:blackPieceTaken[index].iconPath,isWhite: false)),
             ),
+
+            Text(checkKingStatus? 'هشدار پادشاه شما در خظر حمله قرار دارد!' : ''),
             // صفحه اصلی بازی
             Expanded(
               flex: 3,
