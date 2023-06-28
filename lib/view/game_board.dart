@@ -365,7 +365,6 @@ class _GameBoardViewState extends State<GameBoardView> {
     return true;
   }
 
-
   // حرکت مهره ها
   void pieceMovement({required int newRow,required int newCol}){
     // اضافه کرده مهره حذف شده به لیست
@@ -406,14 +405,35 @@ class _GameBoardViewState extends State<GameBoardView> {
   });
 
   // برسی این که بازیکن شکست خورده یا نه
-  if(_checkMeta(isWhiteTurn)){
-    showDialog(context: context, builder: (context) {
-
-    },);
+  if(_checkMeta(!isWhiteTurn)){
+    showDialog(context: context, builder: (context) => AlertDialog(
+      title: const Text('بازی تموم شد رفیق...'),
+      backgroundColor: Colors.grey[300],
+      actions: [
+        TextButton(
+            onPressed: () => _restGame(),
+            child: const Text("شروع مجدد بازی")),
+        TextButton(
+            onPressed: () {},
+            child: const Text("برگشت به صفحه اصلی")),
+      ],
+    ),);
   }
 
   // تغییر نوبت بازیکن
   isWhiteTurn = !isWhiteTurn;
+  }
+
+  // شروع مجدد بازی
+  void _restGame(){
+    setState(() {
+      Navigator.pop(context);
+      _initialBoard();
+      withePieceTaken.clear();
+      blackPieceTaken.clear();
+      whiteKingPosition = [7,4];
+      blackKingPosition = [0,4];
+    });
   }
 
   bool kingCheck(bool isWhiteKing){
