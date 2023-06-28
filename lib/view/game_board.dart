@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_chess_game/component/helper_function.dart';
 import 'package:flutter_chess_game/constant/colors.dart';
@@ -106,7 +104,7 @@ class _GameBoardViewState extends State<GameBoardView> {
       }
 
       // در صورتی که مهره انتخاب شده باشه مسیر های حرکت مجاز نمایش داده میشن
-      validatePieceMove = _calculateRealValidateMove(row: selectedRow,col:  selectedColumn,piece:  selectedChessPiece!,checkSimulation: true);
+      validatePieceMove = _calculateRealValidateMove(row: selectedRow,col:  selectedColumn,piece: selectedChessPiece,checkSimulation: true);
     });
   }
   // محسابه مسیر های حرکت مجاز مهره ها
@@ -288,20 +286,20 @@ class _GameBoardViewState extends State<GameBoardView> {
   }
   List<List<int>> _calculateRealValidateMove({required int row,required int col,required ChessPiece? piece,required bool checkSimulation}){
     List<List<int>> realValidMove = [];
-    List<List<int>> candidateMove = [];
+    List<List<int>> candidateMove = _calculateRawValidMove(row: row,col: col,piece: piece);
 
-    for(var move in candidateMove){
-      int endRow = move[0];
-      int endCol = move[1];
-      if(_simulatedMoveSafe(piece!,row,col,endRow,endCol)){
-        realValidMove.add(move);
-      }else{
-        realValidMove = candidateMove;
+    if(checkSimulation){
+      for (var move in candidateMove) {
+        int endRow = move[0];
+        int endCol = move[1];
+        if (_simulatedMoveSafe(piece!, row, col, endRow, endCol)) {
+          // بررسی تهدید شاه
+            realValidMove.add(move);
+        }else{
+          realValidMove = candidateMove;
+        }
       }
     }
-
-
-
     return realValidMove;
   }
 
@@ -334,7 +332,7 @@ class _GameBoardViewState extends State<GameBoardView> {
         blackKingPosition = originalKingPosition!;
       }
     }
-    return kingInCheck;
+    return !kingInCheck;
   }
 
   // حرکت مهره ها
