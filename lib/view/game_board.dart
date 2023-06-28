@@ -335,6 +335,37 @@ class _GameBoardViewState extends State<GameBoardView> {
     return !kingInCheck;
   }
 
+  // برسی وضعیت برد و باخت
+  bool _checkMeta(bool isWhiteKing) {
+    // اگر شاه در معرض حمله باشد، اعتبار سنجی ناموفق است
+    if (!kingCheck(isWhiteKing)) {
+      return false;
+    }
+
+    for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 8; j++) {
+        // اگر خانه‌ای خالی باشد یا قطعه متعلق به همان رنگ شاه نباشد، بازی ادامه پیدا میکنه
+        if (board[i][j] == null || board[i][j]!.isWhite != isWhiteKing) {
+          continue;
+        }
+        // محاسبه حرکت مجازی مهره
+        List<List<int>> pieceValidateMove = _calculateRealValidateMove(
+          row: i,
+          col: j,
+          piece: board[i][j],
+          checkSimulation: true,
+        );
+        // اگر حرکت مجازی برای مهره وجود داشت، اعتبار سنجی ناموفق است
+        if (pieceValidateMove.isNotEmpty) {
+          return false;
+        }
+      }
+    }
+    // تمام مهره  های متعلق به شاه رنگ موردنظر حرکت مجازی ندارند، اعتبار سنجی موفق است
+    return true;
+  }
+
+
   // حرکت مهره ها
   void pieceMovement({required int newRow,required int newCol}){
     // اضافه کرده مهره حذف شده به لیست
@@ -373,6 +404,14 @@ class _GameBoardViewState extends State<GameBoardView> {
     selectedColumn = -1;
     validatePieceMove = [];
   });
+
+  // برسی این که بازیکن شکست خورده یا نه
+  if(_checkMeta(isWhiteTurn)){
+    showDialog(context: context, builder: (context) {
+
+    },);
+  }
+
   // تغییر نوبت بازیکن
   isWhiteTurn = !isWhiteTurn;
   }
