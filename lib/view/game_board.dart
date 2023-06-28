@@ -21,6 +21,7 @@ class _GameBoardViewState extends State<GameBoardView> {
   // از اونجا که در ابتدا نباید هیچکدوم از خونه ها انتخاب شده باشن از -1 برای مقدار دهی اولیه استفاده میشه
   int selectedRow = -1;
   int selectedColumn = -1;
+  bool isWhiteTurn = true; // برای مشخص کردن نوبت بازیکن
 
   // لیست مهره های حذف شده سیاه و سفید
   List<ChessPiece> withePieceTaken = [];
@@ -80,9 +81,11 @@ class _GameBoardViewState extends State<GameBoardView> {
   void _selectPiece(int row,int col){
     setState(() {
       if(selectedChessPiece == null && board[row][col]!= null){
-        selectedChessPiece = board[row][col];
-        selectedRow = row;
-        selectedColumn = col;
+        if(board[row][col]!.isWhite == isWhiteTurn){
+          selectedChessPiece = board[row][col];
+          selectedRow = row;
+          selectedColumn = col;
+        }
       }
 
       else if(board[row][col]!= null && board[row][col]!.isWhite == selectedChessPiece!.isWhite){
@@ -299,6 +302,8 @@ class _GameBoardViewState extends State<GameBoardView> {
     selectedColumn = -1;
     validatePieceMove = [];
   });
+  // تغییر نوبت بازیکن
+  isWhiteTurn = !isWhiteTurn;
   }
 
   @override
