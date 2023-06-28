@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chess_game/component/finish_game_dialog.dart';
 import 'package:flutter_chess_game/component/helper_function.dart';
 import 'package:flutter_chess_game/constant/colors.dart';
 import 'package:flutter_chess_game/model/chess_piece.dart';
@@ -405,20 +406,7 @@ class _GameBoardViewState extends State<GameBoardView> {
   });
 
   // برسی این که بازیکن شکست خورده یا نه
-  if(_checkMeta(!isWhiteTurn)){
-    showDialog(context: context, builder: (context) => AlertDialog(
-      title: const Text('بازی تموم شد رفیق...'),
-      backgroundColor: Colors.grey[300],
-      actions: [
-        TextButton(
-            onPressed: () => _restGame(),
-            child: const Text("شروع مجدد بازی")),
-        TextButton(
-            onPressed: () {},
-            child: const Text("برگشت به صفحه اصلی")),
-      ],
-    ),);
-  }
+  if(_checkMeta(!isWhiteTurn)) finishGameDialog(context: context,onTap: () => _restGame());
 
   // تغییر نوبت بازیکن
   isWhiteTurn = !isWhiteTurn;
