@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chess_game/gen/assets.gen.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import '../component/game_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,19 +17,14 @@ class HomeScreen extends StatelessWidget {
           Image.asset(Assets.icons.logo.path),
 
           // start game btn
-          Container(
-            width: size.width,
-            height: size.height * 0.06,
-            margin: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.brown[400],
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.brown.shade900,width: 4)
-            ),
-            child:  Center(child: Text("شروع بازی جدید",style: GoogleFonts.vazirmatn(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold))),
-          )
+          GameButton(
+              title: "شروع بازی جدید",
+              onTap: () {},
+              size: size)
         ],
       ),
     );
   }
 }
+
+
