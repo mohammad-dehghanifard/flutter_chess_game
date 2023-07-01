@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chess_game/view/game_board.dart';
+import 'package:flutter_chess_game/view/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const GameBoardView(),
+      home: const SplashScreen(),
     );
   }
 }
