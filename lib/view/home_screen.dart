@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chess_game/gen/assets.gen.dart';
+import 'package:flutter_chess_game/view/game_board.dart';
 
 import '../component/game_button.dart';
 
@@ -19,8 +20,20 @@ class HomeScreen extends StatelessWidget {
           // start game btn
           GameButton(
               title: "شروع بازی جدید",
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const GameBoardView()));
+              },
+              size: size),
+          // shop btn
+          GameButton(
+              title: "فروشگاه",
               onTap: () {},
-              size: size)
+              size: size),
+          // help btn
+          GameButton(
+              title: "راهنمایی",
+              onTap: () {},
+              size: size),
         ],
       ),
     );

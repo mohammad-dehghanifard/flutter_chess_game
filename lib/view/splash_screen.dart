@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chess_game/gen/assets.gen.dart';
-import 'package:flutter_chess_game/view/game_board.dart';
+import 'package:flutter_chess_game/view/home_screen.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3)).then((value) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const GameBoardView()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
     });
   }
 
