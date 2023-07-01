@@ -39,6 +39,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/icons/logo.png');
 
+  /// File path: assets/icons/pices.png
+  AssetGenImage get pices => const AssetGenImage('assets/icons/pices.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         chessBishop,
@@ -47,7 +50,8 @@ class $AssetsIconsGen {
         chessPawn,
         chessQueen,
         chessRook,
-        logo
+        logo,
+        pices
       ];
 }
 
