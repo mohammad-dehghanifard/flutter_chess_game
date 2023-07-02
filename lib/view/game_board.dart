@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chess_game/component/finish_game_dialog.dart';
 import 'package:flutter_chess_game/component/helper_function.dart';
 import 'package:flutter_chess_game/constant/colors.dart';
 import 'package:flutter_chess_game/model/chess_piece.dart';
 import 'package:flutter_chess_game/model/dead_piece.dart';
+import 'package:flutter_chess_game/view/home_screen.dart';
 import 'package:flutter_chess_game/widget/square.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../gen/assets.gen.dart';
@@ -456,66 +458,86 @@ class _GameBoardViewState extends State<GameBoardView> {
 
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Text(widget.playerTowName,style: GoogleFonts.adamina(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
-              // لیست مهره های حذف شده سیاه
-              Expanded(
-                child: GridView.builder(
-                    gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-                    itemCount: blackPieceTaken.length,
-                    itemBuilder: (context, index)  => DeadPiece(iconPath:blackPieceTaken[index].iconPath,isWhite: false)),
-              ),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: AppColors.backGroundColor,
+        automaticallyImplyLeading: false,
+        actions: [
+          SizedBox(
+            width: size.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                    onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen())),
+                    icon: Icon(CupertinoIcons.house,color: Colors.brown[200],)),
+                IconButton(
+                    onPressed: () => finishGameDialog(context: context, onTap: () => _restGame()),
+                    icon: Icon(CupertinoIcons.restart,color: Colors.brown[200],)),
+              ],
+            ),
+          )
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(widget.playerTowName,style: GoogleFonts.adamina(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+            // لیست مهره های حذف شده سیاه
+            Expanded(
+              child: GridView.builder(
+                  gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                  itemCount: blackPieceTaken.length,
+                  itemBuilder: (context, index)  => DeadPiece(iconPath:blackPieceTaken[index].iconPath,isWhite: false)),
+            ),
 
-              Text(checkKingStatus? 'هشدار پادشاه شما در خظر حمله قرار دارد!' : ''),
-              // صفحه اصلی بازی
-              Expanded(
-                flex: 3,
-                child: GridView.builder(
-                  itemCount: 8 * 8,  // تعداد کل عناصر در GridView (64 عنصر)
-                  physics: const NeverScrollableScrollPhysics(),  // غیرفعال کردن امکان اسکرول کردن GridView
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),  // تعیین تنظیمات جدول (8 ستون)
-                  itemBuilder: (context, index) {
+            Text(checkKingStatus? 'هشدار پادشاه شما در خظر حمله قرار دارد!' : ''),
+            // صفحه اصلی بازی
+            Expanded(
+              flex: 3,
+              child: GridView.builder(
+                itemCount: 8 * 8,  // تعداد کل عناصر در GridView (64 عنصر)
+                physics: const NeverScrollableScrollPhysics(),  // غیرفعال کردن امکان اسکرول کردن GridView
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),  // تعیین تنظیمات جدول (8 ستون)
+                itemBuilder: (context, index) {
 
-                   int boardRow = index ~/ 8;
-                   int boardColumn = index % 8;
-                   bool isSelected = selectedRow == boardRow && selectedColumn == boardColumn;
+                 int boardRow = index ~/ 8;
+                 int boardColumn = index % 8;
+                 bool isSelected = selectedRow == boardRow && selectedColumn == boardColumn;
 
-                   //مشخص کردن این که آیا مهره انتخاب شده مسیر حرکت پیشنهادی داره یا خیر
-                   bool validateMove = false;
-                   for(var position in validatePieceMove){
-                     if(position[0] == boardRow && position[1] == boardColumn){
-                       validateMove = true;
-                     }
+                 //مشخص کردن این که آیا مهره انتخاب شده مسیر حرکت پیشنهادی داره یا خیر
+                 bool validateMove = false;
+                 for(var position in validatePieceMove){
+                   if(position[0] == boardRow && position[1] == boardColumn){
+                     validateMove = true;
                    }
-                    return Square(
-                        onTap: () => _selectPiece(boardRow,boardColumn),
-                        isSelected: isSelected,
-                        isValidateMove: validateMove,
-                        isWhite: isWhite(index),
-                        piece: board[boardRow][boardColumn]
-                    );
-                  } // ایجاد عنصر مربعی با رنگ مشخص شده
-                ),
+                 }
+                  return Square(
+                      onTap: () => _selectPiece(boardRow,boardColumn),
+                      isSelected: isSelected,
+                      isValidateMove: validateMove,
+                      isWhite: isWhite(index),
+                      piece: board[boardRow][boardColumn]
+                  );
+                } // ایجاد عنصر مربعی با رنگ مشخص شده
               ),
+            ),
 
-              // لیست مهره های حذف شده سفید
-              Expanded(
-                child: GridView.builder(
-                    gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-                    itemCount: withePieceTaken.length,
-                    itemBuilder: (context, index)  => DeadPiece(iconPath:withePieceTaken[index].iconPath,isWhite: true)),
-              ),
+            // لیست مهره های حذف شده سفید
+            Expanded(
+              child: GridView.builder(
+                  gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                  itemCount: withePieceTaken.length,
+                  itemBuilder: (context, index)  => DeadPiece(iconPath:withePieceTaken[index].iconPath,isWhite: true)),
+            ),
 
-              Text(widget.playerOneName,style: GoogleFonts.adamina(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+            Text(widget.playerOneName,style: GoogleFonts.adamina(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
 
-            ],
-          ),
+          ],
         ),
       ),
 

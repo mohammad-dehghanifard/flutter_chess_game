@@ -8,9 +8,15 @@ Future<dynamic> finishGameDialog({required BuildContext context,required Functio
     actions: [
       TextButton(
           onPressed: onTap,
+          style: ButtonStyle(
+            overlayColor: MaterialStatePropertyAll(Colors.brown[100])
+          ),
           child: Text('Yes',style: GoogleFonts.adamina(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[100]),)),
       TextButton(
-          onPressed: () {},
+          style: ButtonStyle(
+              overlayColor: MaterialStatePropertyAll(Colors.brown[100])
+          ),
+          onPressed: () {Navigator.pop(context);},
           child: Text('No',style: GoogleFonts.adamina(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.brown[100]),)),
     ],
   ),);
