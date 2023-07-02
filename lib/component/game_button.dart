@@ -22,6 +22,9 @@ class GameButton extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.brown[400],
             borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(color: Colors.brown.shade900,blurRadius: 0,offset: const Offset(0,5))
+            ]
         ),
         child:  Center(child: Text(title,style: GoogleFonts.adamina(fontSize: 18,color: Colors.white,fontWeight: FontWeight.bold))),
       ),
