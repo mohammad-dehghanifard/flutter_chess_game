@@ -9,8 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../gen/assets.gen.dart';
 
 class GameBoardView extends StatefulWidget {
-  const GameBoardView({Key? key}) : super(key: key);
-
+  const GameBoardView({Key? key, required this.playerOneName, required this.playerTowName}) : super(key: key);
+  final String playerOneName;
+  final String playerTowName;
   @override
   State<GameBoardView> createState() => _GameBoardViewState();
 }
@@ -462,7 +463,7 @@ class _GameBoardViewState extends State<GameBoardView> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text("نام بازیکن دوم",style: GoogleFonts.vazirmatn(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+              Text(widget.playerTowName,style: GoogleFonts.adamina(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
               // لیست مهره های حذف شده سیاه
               Expanded(
                 child: GridView.builder(
@@ -511,7 +512,7 @@ class _GameBoardViewState extends State<GameBoardView> {
                     itemBuilder: (context, index)  => DeadPiece(iconPath:withePieceTaken[index].iconPath,isWhite: true)),
               ),
 
-              Text("نام بازیکن اول",style: GoogleFonts.vazirmatn(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+              Text(widget.playerOneName,style: GoogleFonts.adamina(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
 
             ],
           ),

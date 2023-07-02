@@ -91,7 +91,10 @@ Future<dynamic> inputPlayerNameDialog(BuildContext context, Size size) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const GameBoardView()));
+                          builder: (context) =>  GameBoardView(
+                            playerOneName: playerOneTxtController.text,
+                            playerTowName: playerTowTxtController.text,
+                          )));
                 }
               },
               child: Text("Start Game",
