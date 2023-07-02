@@ -5,6 +5,7 @@ import 'package:flutter_chess_game/constant/colors.dart';
 import 'package:flutter_chess_game/model/chess_piece.dart';
 import 'package:flutter_chess_game/model/dead_piece.dart';
 import 'package:flutter_chess_game/widget/square.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../gen/assets.gen.dart';
 
 class GameBoardView extends StatefulWidget {
@@ -456,59 +457,64 @@ class _GameBoardViewState extends State<GameBoardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-
-            // لیست مهره های حذف شده سیاه
-            Expanded(
-              child: GridView.builder(
-                  gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-                  itemCount: blackPieceTaken.length,
-                  itemBuilder: (context, index)  => DeadPiece(iconPath:blackPieceTaken[index].iconPath,isWhite: false)),
-            ),
-
-            Text(checkKingStatus? 'هشدار پادشاه شما در خظر حمله قرار دارد!' : ''),
-            // صفحه اصلی بازی
-            Expanded(
-              flex: 3,
-              child: GridView.builder(
-                itemCount: 8 * 8,  // تعداد کل عناصر در GridView (64 عنصر)
-                physics: const NeverScrollableScrollPhysics(),  // غیرفعال کردن امکان اسکرول کردن GridView
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),  // تعیین تنظیمات جدول (8 ستون)
-                itemBuilder: (context, index) {
-
-                 int boardRow = index ~/ 8;
-                 int boardColumn = index % 8;
-                 bool isSelected = selectedRow == boardRow && selectedColumn == boardColumn;
-
-                 //مشخص کردن این که آیا مهره انتخاب شده مسیر حرکت پیشنهادی داره یا خیر
-                 bool validateMove = false;
-                 for(var position in validatePieceMove){
-                   if(position[0] == boardRow && position[1] == boardColumn){
-                     validateMove = true;
-                   }
-                 }
-                  return Square(
-                      onTap: () => _selectPiece(boardRow,boardColumn),
-                      isSelected: isSelected,
-                      isValidateMove: validateMove,
-                      isWhite: isWhite(index),
-                      piece: board[boardRow][boardColumn]
-                  );
-                } // ایجاد عنصر مربعی با رنگ مشخص شده
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text("نام بازیکن دوم",style: GoogleFonts.vazirmatn(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+              // لیست مهره های حذف شده سیاه
+              Expanded(
+                child: GridView.builder(
+                    gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                    itemCount: blackPieceTaken.length,
+                    itemBuilder: (context, index)  => DeadPiece(iconPath:blackPieceTaken[index].iconPath,isWhite: false)),
               ),
-            ),
 
-            // لیست مهره های حذف شده سفید
-            Expanded(
-              child: GridView.builder(
-                  gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
-                  itemCount: withePieceTaken.length,
-                  itemBuilder: (context, index)  => DeadPiece(iconPath:withePieceTaken[index].iconPath,isWhite: true)),
-            ),
-          ],
+              Text(checkKingStatus? 'هشدار پادشاه شما در خظر حمله قرار دارد!' : ''),
+              // صفحه اصلی بازی
+              Expanded(
+                flex: 3,
+                child: GridView.builder(
+                  itemCount: 8 * 8,  // تعداد کل عناصر در GridView (64 عنصر)
+                  physics: const NeverScrollableScrollPhysics(),  // غیرفعال کردن امکان اسکرول کردن GridView
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),  // تعیین تنظیمات جدول (8 ستون)
+                  itemBuilder: (context, index) {
+
+                   int boardRow = index ~/ 8;
+                   int boardColumn = index % 8;
+                   bool isSelected = selectedRow == boardRow && selectedColumn == boardColumn;
+
+                   //مشخص کردن این که آیا مهره انتخاب شده مسیر حرکت پیشنهادی داره یا خیر
+                   bool validateMove = false;
+                   for(var position in validatePieceMove){
+                     if(position[0] == boardRow && position[1] == boardColumn){
+                       validateMove = true;
+                     }
+                   }
+                    return Square(
+                        onTap: () => _selectPiece(boardRow,boardColumn),
+                        isSelected: isSelected,
+                        isValidateMove: validateMove,
+                        isWhite: isWhite(index),
+                        piece: board[boardRow][boardColumn]
+                    );
+                  } // ایجاد عنصر مربعی با رنگ مشخص شده
+                ),
+              ),
+
+              // لیست مهره های حذف شده سفید
+              Expanded(
+                child: GridView.builder(
+                    gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 8),
+                    itemCount: withePieceTaken.length,
+                    itemBuilder: (context, index)  => DeadPiece(iconPath:withePieceTaken[index].iconPath,isWhite: true)),
+              ),
+
+              Text("نام بازیکن اول",style: GoogleFonts.vazirmatn(fontSize: 16,color: Colors.white,fontWeight: FontWeight.bold),),
+
+            ],
+          ),
         ),
       ),
 
